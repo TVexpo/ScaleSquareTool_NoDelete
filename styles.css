@@ -102,7 +102,28 @@ main#stageWrap{ padding: 1rem; }
   position:absolute;
   left:0; top:0;
 }
-#overlay{ pointer-events:none; }
+/* overlay pointer interactions are controlled via JS */
+/* #overlay{ pointer-events:none; } */
+.overlay-disabled{ pointer-events:none; }
+
+/* --- Context menu --- */
+.ctx-menu{
+  position:absolute;
+  list-style:none;
+  margin:0; padding:0;
+  background:var(--panel);
+  border:1px solid var(--outline);
+  border-radius:8px;
+  box-shadow:0 4px 16px var(--shadow);
+  z-index:15;
+}
+.ctx-menu li{
+  padding:.4rem .8rem;
+  cursor:pointer;
+}
+.ctx-menu li:hover{
+  background:var(--outline);
+}
 
 .footer{ padding: 0 1rem 1rem; }
 .footer .bubble{ padding:.8rem 1rem; border-radius:16px; border:1px solid var(--outline); }
