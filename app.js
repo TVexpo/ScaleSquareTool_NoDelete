@@ -204,7 +204,7 @@ function setMode(m){
     calibrate: '請在圖上拖曳一段「已知真實長度」的線段，放開後輸入真實長度（如 1m / 200cm）。',
     square: '在圖上按住拖曳建立 1:1 正方形（拖曳時會有預覽）。',
     rect: '在圖上按住拖曳建立長方形（拖曳時會有預覽）。',
-    select: '點選圖形可選取；右鍵刪除；中心點拖曳移動，右下角自由縮放，右/下中點單獨調寬/高。'
+    select: '點選圖形可選取；雙擊刪除；中心點拖曳移動，右下角自由縮放，右/下中點單獨調寬/高。'
   }[m] || '';
   if (hint) hint.textContent = msg;
 }
@@ -403,8 +403,7 @@ function onPointerUp(evt){
   }
   redrawOverlay();
 }
-
-function onContextMenu(evt){
+function onDoubleClick(evt){
   const g = evt.target.closest('g[data-id]');
   if (!g) return;
   evt.preventDefault();
@@ -419,8 +418,7 @@ function onContextMenu(evt){
     return;
   }
   redrawOverlay();
-  const stageRect = $('#stage').getBoundingClientRect();
-  showCtxMenu(evt.clientX - stageRect.left, evt.clientY - stageRect.top);
+  Deletion.deleteSelected();
 }
 
 // --- File I/O (v1.3.1-style for images) ---
@@ -498,7 +496,7 @@ themeToggle.addEventListener('change', (e) => {
 ['pointerdown','mousedown'].forEach(ev => overlay.addEventListener(ev, onPointerDown));
 ['pointermove','mousemove'].forEach(ev => overlay.addEventListener(ev, onPointerMove));
 ['pointerup','mouseup','mouseleave'].forEach(ev => overlay.addEventListener(ev, onPointerUp));
-overlay.addEventListener('contextmenu', onContextMenu);
+overlay.addEventListener('dblclick', onDoubleClick);
 
 // Prevent text selection during drag
 document.addEventListener('dragstart', e => e.preventDefault());
