@@ -2,6 +2,8 @@
 const $ = (s, el = document) => el.querySelector(s);
 const bgCanvas = $('#bgCanvas');
 const overlay = $('#overlay');
+const ctxMenu = $('#contextMenu');
+const ctxDelete = $('#contextDelete');
 const ctx = bgCanvas.getContext('2d');
 
 const fileInput = $('#fileInput');
@@ -215,10 +217,19 @@ function relPos(evt){
   return { x: Math.max(0, Math.min(rect.width, x)), y: Math.max(0, Math.min(rect.height, y)) };
 }
 
+function showCtxMenu(x, y){
+  if (!ctxMenu) return;
+  ctxMenu.style.left = `${x}px`;
+  ctxMenu.style.top = `${y}px`;
+  ctxMenu.hidden = false;
+}
+function hideCtxMenu(){ if (ctxMenu) ctxMenu.hidden = true; }
+
 // --- Pointer handlers ---
 function onPointerDown(evt){
   if (!(evt.target instanceof Element)) return;
   const pos = relPos(evt);
+  hideCtxMenu();
 
   // 1) Always prioritize existing handles (selection/manipulation), regardless of tool mode
   const handle = evt.target.closest('.handle');
@@ -392,7 +403,6 @@ function onPointerUp(evt){
   }
   redrawOverlay();
 }
-
 function onDoubleClick(evt){
   const g = evt.target.closest('g[data-id]');
   if (!g) return;
@@ -527,6 +537,10 @@ const Deletion = CreateDeleteModule({
   },
 });
 Deletion.bindUI({ deleteBtn: document.getElementById('deleteBtn'), win: window });
+if (ctxDelete) ctxDelete.addEventListener('click', () => { Deletion.deleteSelected(); hideCtxMenu(); });
+document.addEventListener('click', (e) => {
+  if (ctxMenu && !ctxMenu.hidden && !ctxMenu.contains(e.target)) hideCtxMenu();
+});
 
 const Exporter = CreateExportModule({
   getBgCanvas: () => document.getElementById('bgCanvas'),
