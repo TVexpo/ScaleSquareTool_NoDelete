@@ -102,7 +102,9 @@ main#stageWrap{ padding: 1rem; }
   position:absolute;
   left:0; top:0;
 }
-#overlay{ pointer-events:none; }
+/* overlay pointer interactions are controlled via JS */
+/* #overlay{ pointer-events:none; } */
+.overlay-disabled{ pointer-events:none; }
 
 .footer{ padding: 0 1rem 1rem; }
 .footer .bubble{ padding:.8rem 1rem; border-radius:16px; border:1px solid var(--outline); }
