@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>比例尺 & 幾何規劃（v1.4.8M 模組化）</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body class="theme-dark">
+  <header class="toolbar glassy">
+    <div class="brand chip">
+      <span class="logo">◼︎</span>
+      <span class="title">比例尺 & 幾何規劃</span>
+    </div>
+
+    <div class="controls">
+      <label class="chip btn" for="fileInput">➕ 匯入底圖 (PNG/JPG/PDF)</label>
+      <input id="fileInput" type="file" accept=".png,.jpg,.jpeg,.pdf" hidden />
+
+      <div id="pdfControls" class="chip btn-group" hidden>
+        <button id="prevPage" class="btn">◀︎</button>
+        <span class="badge"><span id="pageNo">1</span> / <span id="pageCount">1</span></span>
+        <button id="nextPage" class="btn">▶︎</button>
+      </div>
+
+      <button id="calibrateBtn" class="chip btn">📏 校正比例尺</button>
+      <button id="squareBtn" class="chip btn">▣ 正方形</button>
+      <button id="rectBtn" class="chip btn">▭ 長方形</button>
+      <button id="deleteBtn" class="chip btn">🗑 刪除</button>
+
+      <div class="chip info">
+        <span id="scaleInfo">尚未校正比例尺</span>
+      </div>
+
+      <button id="exportBtn" class="chip btn">⬇︎ 匯出PNG</button>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="chip toggle">
+      <input id="themeToggle" type="checkbox" checked />
+      <label for="themeToggle">🌙 暗/亮</label>
+    </div>
+  </header>
+
+  <main id="stageWrap">
+    <div id="stage" class="bubble">
+      <canvas id="bgCanvas"></canvas>
+      <svg id="overlay" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="hint" class="hint"></div>
+    </div>
+  </main>
+
+  <footer class="footer small">
+    <div class="bubble glassy">
+      <strong>使用說明：</strong>
+      1) 匯入底圖。2) 「校正比例尺」在已知距離上拉線並輸入真實長度。3) 使用「正方形」或「長方形」工具（拖拉時會有預覽）。
+      4) 點一下圖形或中央圓點可選取（粉紅），🗑 或 Delete 刪除。5) 可切換暗/亮主題，匯出 PNG。
+    </div>
+  </footer>
+
+  <!-- 模組（不讀全域） -->
+  <script src="delete.module.js"></script>
+  <script src="export.module.js"></script>
+  <!-- 主程式 -->
+  <script src="app.js"></script>
+</body>
+</html>

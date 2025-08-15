@@ -1,0 +1,148 @@
+/* ---- Theme Variables ---- */
+:root{
+  --bg:#111;
+  --panel:#1b1f28;
+  --panel-2:#222834;
+  --text:#e7e9ee;
+  --muted:#a9b0bd;
+  --accent:#6ea8fe;
+  --accent-2:#89f0c0;
+  --danger:#ff6b7a;
+  --outline:#2b3140;
+  --shadow: rgba(0,0,0,0.4);
+}
+
+body.theme-dark{
+  --bg: #0f1115;
+  --panel: #171a21;
+  --panel-2: #1d2129;
+  --text: #ffffff;
+  --muted: #cbd2df;
+  --accent: #6ea8fe;
+  --accent-2: #89f0c0;
+  --danger: #ff6b7a;
+  --outline: #2b3140;
+  --shadow: rgba(0,0,0,0.4);
+}
+body.theme-light{
+  --bg:#f7f8fb;
+  --panel:#ffffff;
+  --panel-2:#f2f4f8;
+  --text:#202431;
+  --muted:#5d6472;
+  --accent:#2456d6;
+  --accent-2:#0ea271;
+  --danger:#d63a4a;
+  --outline:#dfe3eb;
+  --shadow: rgba(0,0,0,0.1);
+}
+
+/* ---- Reset & Layout ---- */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", "Segoe UI", Helvetica, Arial;
+  color:var(--text);
+  background: radial-gradient(1200px 600px at 10% -10%, #1b2030 0%, var(--bg) 40%) fixed;
+}
+
+.toolbar{
+  display:flex; align-items:center; gap:.6rem;
+  padding:.6rem .8rem;
+  border-bottom:1px solid var(--outline);
+  position:sticky; top:0; z-index:10;
+  backdrop-filter: saturate(130%) blur(8px);
+  color: var(--text);
+}
+
+.brand{ display:flex; align-items:center; gap:.5rem; border-radius:999px; }
+.brand .logo{ font-size:1.1rem; }
+.title{ font-weight:700; letter-spacing:.02em; }
+
+.controls{ display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; }
+
+.chip{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.45rem .7rem;
+  border-radius:999px;
+  background:var(--panel);
+  border:1px solid var(--outline);
+  box-shadow: 0 2px 8px var(--shadow);
+  color: var(--text);
+}
+
+.btn{ cursor:pointer; user-select:none; color: var(--text); }
+.btn:hover{ outline:2px solid var(--accent); }
+.btn-group .btn{ border-radius:999px; }
+.badge{ font-variant-numeric: tabular-nums; color: var(--text); }
+
+.info{ color:var(--muted); }
+.toggle{ gap:.4rem; }
+
+.glassy{ background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06)); }
+
+.spacer{ flex:1; }
+
+main#stageWrap{ padding: 1rem; }
+#stage{
+  position:relative;
+  margin:auto;
+  max-width:min(95vw, 1400px);
+  height:min(75vh, calc(100vh - 210px));
+  background:var(--panel-2);
+  border:1px solid var(--outline);
+  border-radius:24px;
+  box-shadow: 0 10px 40px var(--shadow);
+  overflow:hidden;
+}
+
+/* Positioning handled via JS */
+#bgCanvas, #overlay{
+  position:absolute;
+  left:0; top:0;
+}
+#overlay{ pointer-events:none; }
+
+.footer{ padding: 0 1rem 1rem; }
+.footer .bubble{ padding:.8rem 1rem; border-radius:16px; border:1px solid var(--outline); }
+
+/* --- Bubbles & R-corners --- */
+.bubble{ border-radius:22px; }
+
+/* --- Hint tooltip --- */
+.hint{
+  position:absolute; left:10px; bottom:10px;
+  background:var(--panel);
+  padding:.35rem .6rem;
+  border-radius:12px;
+  border:1px solid var(--outline);
+  color:var(--muted);
+  font-size:.9rem;
+  box-shadow: 0 4px 16px var(--shadow);
+}
+
+/* --- Overlay styles --- */
+svg text.dim{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  fill: var(--text);
+  paint-order: stroke;
+  stroke: var(--panel-2);
+  stroke-width: 3px;
+}
+
+.line-guide{ stroke: var(--accent); stroke-width:2; stroke-dasharray:5 6; }
+.handle{ fill: var(--accent); stroke: var(--panel-2); stroke-width:2; }
+.square{ fill: rgba(102, 163, 255, 0.12); stroke: var(--accent); stroke-width:2; }
+.rect{ fill: rgba(102, 163, 255, 0.10); stroke: var(--accent); stroke-width:2; }
+
+/* selected -> pink */
+.square[data-selected="true"], .rect[data-selected="true"]{ stroke:#ff4fa3; fill: rgba(255,79,163,.18); }
+.handle[data-kind="corner"], .handle[data-kind="rcorner"]{ r:6; }
+.handle[data-kind="move"], .handle[data-kind="rmove"], .handle[data-kind="rwidth"], .handle[data-kind="rheight"]{ r:5; fill: var(--muted); }
+/* center selected visual */
+.handle.center[data-selected="true"]{ stroke-width:3; }
+
+/* --- Buttons states */
+#squareBtn.active, #calibrateBtn.active, #rectBtn.active{ outline:2px solid var(--accent-2); }
