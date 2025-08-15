@@ -190,8 +190,8 @@ function redrawOverlay(){
 function setMode(m){
   state.mode = m;
   // Keep overlay live even in idle for reselection
-  if (['calibrate','square','rect','select','idle'].includes(m)) overlay.style.pointerEvents = 'auto';
-  else overlay.style.pointerEvents = 'none';
+  const interactiveModes = ['calibrate','square','rect','select','idle'];
+  overlay.classList.toggle('overlay-disabled', !interactiveModes.includes(m));
 
   calibrateBtn.classList.toggle('active', m==='calibrate');
   squareBtn.classList.toggle('active', m==='square');
@@ -202,7 +202,7 @@ function setMode(m){
     calibrate: '請在圖上拖曳一段「已知真實長度」的線段，放開後輸入真實長度（如 1m / 200cm）。',
     square: '在圖上按住拖曳建立 1:1 正方形（拖曳時會有預覽）。',
     rect: '在圖上按住拖曳建立長方形（拖曳時會有預覽）。',
-    select: '點選圖形可選取；中心點拖曳移動，右下角自由縮放，右/下中點單獨調寬/高。'
+    select: '點選圖形可選取；雙擊刪除；中心點拖曳移動，右下角自由縮放，右/下中點單獨調寬/高。'
   }[m] || '';
   if (hint) hint.textContent = msg;
 }
@@ -393,6 +393,24 @@ function onPointerUp(evt){
   redrawOverlay();
 }
 
+function onDoubleClick(evt){
+  const g = evt.target.closest('g[data-id]');
+  if (!g) return;
+  evt.preventDefault();
+  const id = g.getAttribute('data-id');
+  if (g.querySelector('.square')){
+    state.squares.forEach(s => s.selected = (s.id===id));
+    state.rects.forEach(r => r.selected = false);
+  } else if (g.querySelector('.rect')){
+    state.rects.forEach(r => r.selected = (r.id===id));
+    state.squares.forEach(s => s.selected = false);
+  } else {
+    return;
+  }
+  redrawOverlay();
+  Deletion.deleteSelected();
+}
+
 // --- File I/O (v1.3.1-style for images) ---
 fileInput.addEventListener('change', async (e) => {
   const f = e.target.files?.[0];
@@ -468,6 +486,7 @@ themeToggle.addEventListener('change', (e) => {
 ['pointerdown','mousedown'].forEach(ev => overlay.addEventListener(ev, onPointerDown));
 ['pointermove','mousemove'].forEach(ev => overlay.addEventListener(ev, onPointerMove));
 ['pointerup','mouseup','mouseleave'].forEach(ev => overlay.addEventListener(ev, onPointerUp));
+overlay.addEventListener('dblclick', onDoubleClick);
 
 // Prevent text selection during drag
 document.addEventListener('dragstart', e => e.preventDefault());
