@@ -190,8 +190,8 @@ function redrawOverlay(){
 function setMode(m){
   state.mode = m;
   // Keep overlay live even in idle for reselection
-  if (['calibrate','square','rect','select','idle'].includes(m)) overlay.style.pointerEvents = 'auto';
-  else overlay.style.pointerEvents = 'none';
+  const interactiveModes = ['calibrate','square','rect','select','idle'];
+  overlay.classList.toggle('overlay-disabled', !interactiveModes.includes(m));
 
   calibrateBtn.classList.toggle('active', m==='calibrate');
   squareBtn.classList.toggle('active', m==='square');
